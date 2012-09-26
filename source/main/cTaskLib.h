@@ -215,7 +215,8 @@ private:
   double Task_Math1in_AN(cTaskContext& ctx) const;
   double Task_Math1in_AO(cTaskContext& ctx) const;
   double Task_Math1in_AP(cTaskContext& ctx) const;
-
+    double Task_Math1in_AQ(cTaskContext& ctx) const;
+    
   // Arbitrary 2-Input Math Tasks
   double Task_Math2in_AA(cTaskContext& ctx) const;
   double Task_Math2in_AB(cTaskContext& ctx) const;
@@ -239,6 +240,7 @@ private:
   double Task_Math2in_AT(cTaskContext& ctx) const;
   double Task_Math2in_AU(cTaskContext& ctx) const;
   double Task_Math2in_AV(cTaskContext& ctx) const;
+    double Task_Math2in_AW(cTaskContext& ctx) const;
 
   // Arbitrary 3-Input Math Tasks
   double Task_Math3in_AA(cTaskContext& ctx) const;
@@ -254,6 +256,7 @@ private:
   double Task_Math3in_AK(cTaskContext& ctx) const;
   double Task_Math3in_AL(cTaskContext& ctx) const;
   double Task_Math3in_AM(cTaskContext& ctx) const;
+    double Task_Math3in_AN(cTaskContext& ctx) const;
   
   // Matching Tasks
   void Load_MatchStr(const cString& name, const cString& argstr, cEnvReqs& envreqs, Feedback& feedback);

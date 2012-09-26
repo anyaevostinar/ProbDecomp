@@ -204,6 +204,7 @@ cTaskEntry* cTaskLib::AddTask(const cString& name, const cString& info, cEnvReqs
   else if (name == "math_1AN") NewTask(name, "Math 1AN (X/4)", &cTaskLib::Task_Math1in_AN);  
   else if (name == "math_1AO") NewTask(name, "Math 1AO (X-6)", &cTaskLib::Task_Math1in_AO);  
   else if (name == "math_1AP") NewTask(name, "Math 1AP (X-7)", &cTaskLib::Task_Math1in_AP);
+  else if (name == "math_1AQ") NewTask(name, "Math 1AQ (4X)", &cTaskLib::Task_Math1in_AQ);
   
   // Arbitrary 2-Input Math Tasks
   if (name == "math_2AA") NewTask(name, "Math 2AA (sqrt(X+Y))", &cTaskLib::Task_Math2in_AA);  
@@ -228,6 +229,7 @@ cTaskEntry* cTaskLib::AddTask(const cString& name, const cString& info, cEnvReqs
   else if (name == "math_2AT") NewTask(name, "Math 2AT (X+3Y)", &cTaskLib::Task_Math2in_AT);
   else if (name == "math_2AU") NewTask(name, "Math 2AU (2X+3Y)", &cTaskLib::Task_Math2in_AU);
   else if (name == "math_2AV") NewTask(name, "Math 2AV (XY^2)", &cTaskLib::Task_Math2in_AV);
+  else if (name == "math_2AW")NewTask(name, "Math 2AW (3X-Y)", &cTaskLib::Task_Math2in_AW);
   
   // Arbitrary 3-Input Math Tasks
   if (name == "math_3AA")      NewTask(name, "Math 3AA (X^2+Y^2+Z^2)", &cTaskLib::Task_Math3in_AA);  
@@ -242,7 +244,8 @@ cTaskEntry* cTaskLib::AddTask(const cString& name, const cString& info, cEnvReqs
   else if (name == "math_3AJ") NewTask(name, "Math 3AJ ((X-Y)^2+(Y-Z)^2+(Z-X)^2)", &cTaskLib::Task_Math3in_AJ);  
   else if (name == "math_3AK") NewTask(name, "Math 3AK ((X+Y)^2+(Y+Z)^2+(Z+X)^2)", &cTaskLib::Task_Math3in_AK);  
   else if (name == "math_3AL") NewTask(name, "Math 3AL ((X-Y)^2+(X-Z)^2)", &cTaskLib::Task_Math3in_AL);  
-  else if (name == "math_3AM") NewTask(name, "Math 3AM ((X+Y)^2+(Y+Z)^2)", &cTaskLib::Task_Math3in_AM);  
+  else if (name == "math_3AM") NewTask(name, "Math 3AM ((X+Y)^2+(Y+Z)^2)", &cTaskLib::Task_Math3in_AM);
+  else if (name == "math_3AN") NewTask(name, "Math 3AN (5X - 2Y + Z)", &cTaskLib::Task_Math3in_AN);
   
   // Matching Tasks
   if (name == "matchstr") Load_MatchStr(name, info, envreqs, feedback);
@@ -1282,6 +1285,20 @@ double cTaskLib::Task_Math1in_AP(cTaskContext& ctx) const //(X-7)
   return 0.0;
 }
 
+double cTaskLib::Task_Math1in_AQ(cTaskContext& ctx) const // (4X)
+{
+    const tBuffer<int>& input_buffer = ctx.GetInputBuffer();
+    const int test_output = ctx.GetOutputBuffer()[0];
+    const int input_size = input_buffer.GetNumStored();
+    
+    for (int i = 0; i < input_size; i ++) {
+        if (test_output == 4*input_buffer[i]) return 1.0;
+    }
+    return 0.0;
+}
+
+
+
 double cTaskLib::Task_Math2in_AA(cTaskContext& ctx) const //(sqrt(X+Y))
 {
   const tBuffer<int>& input_buffer = ctx.GetInputBuffer();
@@ -1640,6 +1657,23 @@ double cTaskLib::Task_Math2in_AV(cTaskContext& ctx) const //(XY^2)
   return 0.0;
 }
 
+double cTaskLib::Task_Math2in_AW(cTaskContext& ctx) const // (3X - Y)
+{
+    const tBuffer<int>& input_buffer = ctx.GetInputBuffer();
+    const int test_output = ctx.GetOutputBuffer()[0];
+    const int input_size = input_buffer.GetNumStored();
+    
+    for (int i = 0; i < input_size; i++) {
+        for (int j = 0; j < input_size; j++) {
+            if (i == j) continue;
+            if (test_output == 3 * input_buffer[i] - input_buffer[j])
+                return 1.0;
+        }
+    }
+    return 0.0;
+    
+}
+
 double cTaskLib::Task_Math3in_AA(cTaskContext& ctx) const //(X^2+Y^2+Z^2)
 {
   const tBuffer<int>& input_buffer = ctx.GetInputBuffer();
@@ -1877,6 +1911,23 @@ double cTaskLib::Task_Math3in_AM(cTaskContext& ctx) const //((X+Y)^2+(Y+Z)^2)
     }
   }
   return 0.0;
+}
+
+double cTaskLib::Task_Math3in_AN(cTaskContext& ctx) const // (5X - 2A +C )
+{
+    const tBuffer<int>& input_buffer = ctx.GetInputBuffer();
+    const int test_output = ctx.GetOutputBuffer()[0];
+    const int input_size = input_buffer.GetNumStored();
+    for (int i = 0; i < input_size; i ++) {
+        for (int j = 0; j < input_size; j ++) {
+            for (int k = 0; k < input_size; k ++) {
+                if (i == j || j == k || i == k) continue;
+                if (test_output == 5*input_buffer[i] - 2 * input_buffer[j] + input_buffer[k])
+                    return 1.0;
+            }
+        }
+    }
+    return 0.0;
 }
 
 
